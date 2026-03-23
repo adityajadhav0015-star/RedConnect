@@ -5,7 +5,7 @@ function SearchResults() {
 
 const searchBlood = async () => {
   const response = await fetch(
-    "https://redconnect-backend.onrender.com/api/blood/search?bloodGroup=${bloodGroup}&location=${location}`
+    "https://redconnect-backend.onrender.com/api/blood/search?bloodGroup=${bloodGroup}&location=${location}"
   );
 
   const data = await response.json();
