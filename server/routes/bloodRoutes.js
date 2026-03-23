@@ -7,7 +7,7 @@ const {
   searchBlood,
   updateBloodStock,
   sendAlert
-} = require("../controllers/BloodController");
+} = require("../controllers/bloodController");
 
 router.post("/register", registerBloodBank);
 router.post("/login", loginBloodBank);
