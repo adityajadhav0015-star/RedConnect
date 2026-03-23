@@ -28,7 +28,7 @@ function RequestBlood() {
 
   try {
 
-   const res = await fetch("http://localhost:5000/api/bloodbank/search", {
+   const res = await fetch("https://redconnect-backend.onrender.com/api/bloodbank/search", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
