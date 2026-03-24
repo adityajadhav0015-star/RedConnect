@@ -1,17 +1,8 @@
-import React from "react";
+import React, { useState } from "react"; // <-- useState import add kiya
 import { useLocation, Link } from "react-router-dom";
 
 function SearchResults() {
-
-const searchBlood = async () => {
-  const response = await fetch(
-    "https://redconnect-backend.onrender.com/api/blood/search?bloodGroup=${bloodGroup}&location=${location}"
-  );
-
-  const data = await response.json();
-  setResults(data);
-};
-
+  const [results, setResults] = useState([]); // <-- setResults define kiya
 
   const location = useLocation();
   const { bloodGroup, city } = location.state || {};
@@ -24,15 +15,27 @@ const searchBlood = async () => {
   ];
 
   // Filter data based on user selection
-  const results = bloodBanks.filter(
+  const filteredResults = bloodBanks.filter(
     (bank) =>
       bank.city.toLowerCase() === (city || "").toLowerCase() &&
       bank.bloodGroups.includes(bloodGroup)
   );
 
+  // Agar future me API se fetch karna ho
+  const searchBlood = async () => {
+    try {
+      const response = await fetch(
+        "https://redconnect-backend.onrender.com/api/blood/search?bloodGroup=${bloodGroup}&location=${city}"
+      );
+      const data = await response.json();
+      setResults(data);
+    } catch (error) {
+      console.error("Error fetching blood banks:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 flex flex-col font-sans p-6">
-
       {/* Header */}
       <header className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white py-10 text-center rounded-xl shadow-lg mb-8">
         <h1 className="text-4xl md:text-5xl font-extrabold flex justify-center items-center gap-4">
@@ -45,8 +48,8 @@ const searchBlood = async () => {
 
       {/* Results */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        {results.length > 0 ? (
-          results.map((bank, idx) => (
+        {(results.length > 0 ? results : filteredResults).length > 0 ? (
+          (results.length > 0 ? results : filteredResults).map((bank, idx) => (
             <div key={idx} className="bg-white/90 p-6 rounded-2xl shadow-lg flex flex-col gap-2 hover:-translate-y-1 transform transition-all">
               <h3 className="text-red-700 text-xl font-bold">{bank.name}</h3>
               <p className="text-gray-700">City: {bank.city}</p>
